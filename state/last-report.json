@@ -1,0 +1,284 @@
+{
+  "started_at": "2026-11-22T07:14:06.513909+00:00",
+  "finished_at": "2026-11-22T07:14:20.328013+00:00",
+  "gap_minutes": -1,
+  "mode": "send",
+  "sources": [
+    {
+      "name": "binance_api",
+      "exchange": "Binance",
+      "layer": "api",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 30,
+      "duration_ms": 121
+    },
+    {
+      "name": "okx_api",
+      "exchange": "OKX",
+      "layer": "api",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 20,
+      "duration_ms": 352
+    },
+    {
+      "name": "bybit_api",
+      "exchange": "Bybit",
+      "layer": "api",
+      "status": "blocked",
+      "health": "partial_failure",
+      "error": "HTTP Error 403: Forbidden",
+      "items": 0,
+      "duration_ms": 172
+    },
+    {
+      "name": "bitget_html",
+      "exchange": "Bitget",
+      "layer": "html",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 22,
+      "duration_ms": 320
+    },
+    {
+      "name": "gate_blocked",
+      "exchange": "Gate",
+      "layer": "blocked",
+      "status": "blocked",
+      "health": "partial_failure",
+      "error": "GitHub 出口实测 403，按预期记失败，交云端搜索兜底",
+      "items": 0,
+      "duration_ms": 0
+    },
+    {
+      "name": "coinbase_status",
+      "exchange": "Coinbase",
+      "layer": "rss_json",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 25,
+      "duration_ms": 148
+    },
+    {
+      "name": "coinbase_status_json",
+      "exchange": "Coinbase",
+      "layer": "rss_json",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 1,
+      "duration_ms": 153
+    },
+    {
+      "name": "weex_html",
+      "exchange": "WEEX",
+      "layer": "html",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 13,
+      "duration_ms": 1009
+    },
+    {
+      "name": "yubit_sitemap",
+      "exchange": "YUBIT",
+      "layer": "rss_json",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 20,
+      "duration_ms": 5710
+    },
+    {
+      "name": "deepcoin_html",
+      "exchange": "Deepcoin",
+      "layer": "html",
+      "status": "low_quality",
+      "health": "partial_failure",
+      "error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
+      "items": 0,
+      "duration_ms": 909
+    },
+    {
+      "name": "easicoin_zendesk",
+      "exchange": "EasiCoin",
+      "layer": "api",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 5,
+      "duration_ms": 468
+    },
+    {
+      "name": "bitbaby_html",
+      "exchange": "Bitbaby",
+      "layer": "html",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 14,
+      "duration_ms": 1759
+    },
+    {
+      "name": "hotcoin_html",
+      "exchange": "Hotcoin",
+      "layer": "html",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 27,
+      "duration_ms": 261
+    },
+    {
+      "name": "bittap_zendesk",
+      "exchange": "BitTap",
+      "layer": "api",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 5,
+      "duration_ms": 484
+    },
+    {
+      "name": "mgbx_zendesk",
+      "exchange": "MGBX",
+      "layer": "api",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 5,
+      "duration_ms": 496
+    },
+    {
+      "name": "mexc_api",
+      "exchange": "MEXC",
+      "layer": "api",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 10,
+      "duration_ms": 329
+    },
+    {
+      "name": "mexc_delisting_api",
+      "exchange": "MEXC",
+      "layer": "api",
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 10,
+      "duration_ms": 309
+    },
+    {
+      "name": "mexc_telegram",
+      "exchange": "MEXC",
+      "layer": "html",
+      "status": "low_quality",
+      "health": "partial_failure",
+      "error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
+      "items": 0,
+      "duration_ms": 438
+    }
+  ],
+  "source_failures": {
+    "bybit_api": {
+      "count": 1,
+      "error_type": "blocked",
+      "last_error": "HTTP Error 403: Forbidden",
+      "at": "2026-11-22T07:14:18.082876+00:00"
+    },
+    "deepcoin_html": {
+      "count": 1,
+      "error_type": "low_quality",
+      "last_error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
+      "at": "2026-11-22T07:14:18.082900+00:00"
+    },
+    "mexc_telegram": {
+      "count": 1,
+      "error_type": "low_quality",
+      "last_error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
+      "at": "2026-11-22T07:14:18.082910+00:00"
+    }
+  },
+  "all_sources_failed": false,
+  "source_health": "partial_failure",
+  "source_health_by_name": {
+    "binance_api": "ok",
+    "okx_api": "ok",
+    "bybit_api": "partial_failure",
+    "bitget_html": "ok",
+    "gate_blocked": "partial_failure",
+    "coinbase_status": "ok",
+    "coinbase_status_json": "ok",
+    "weex_html": "ok",
+    "yubit_sitemap": "ok",
+    "deepcoin_html": "partial_failure",
+    "easicoin_zendesk": "ok",
+    "bitbaby_html": "ok",
+    "hotcoin_html": "ok",
+    "bittap_zendesk": "ok",
+    "mgbx_zendesk": "ok",
+    "mexc_api": "ok",
+    "mexc_delisting_api": "ok",
+    "mexc_telegram": "partial_failure"
+  },
+  "cloud": {
+    "since": "2026-11-19 06:44 UTC",
+    "queries": [
+      "交易所跑路",
+      "限制提币",
+      "暂停提币",
+      "无法提币",
+      "提币不到账",
+      "交易所维护",
+      "Binance 提现暂停",
+      "BitTap 暂停提币",
+      "Bitbaby 维护延期",
+      "Bitget 登录不了",
+      "Bybit withdrawal suspended",
+      "Coinbase maintenance extended"
+    ],
+    "engine_counts": {
+      "exa_public": 12
+    },
+    "hits": 57,
+    "errors": [],
+    "skipped": []
+  },
+  "candidates": [
+    {
+      "exchange": "Binance",
+      "title": "公告里的「暂停提现」通常意味着什么？先分清三种情况 - Binance 币安中文网",
+      "url": "https://www.bianbtc.com/post/978.html",
+      "status": "新增",
+      "decision": {
+        "level": "high",
+        "stage": "阶段3 全面暂停",
+        "scope": "全站",
+        "reason": "命中规则 R05_withdraw_suspended：暂停提现；阶段 3；全站；未给恢复时间也未给限额数字，按高风险处理；独立来源 2 个/独立用户 0 个，达到升级门槛",
+        "rule": "R05_withdraw_suspended",
+        "signal": "暂停提币/提现",
+        "resolved": false,
+        "has_details": true,
+        "recovery": "恢复时间另告",
+        "limit": "",
+        "risk_limit": ""
+      }
+    }
+  ],
+  "pushed": [
+    "Binance｜公告里的「暂停提现」通常意味着什么？先分清三种情况 - Binance 币安中文网"
+  ],
+  "push_failed": [],
+  "deduped_same_round": 0,
+  "deduped_same_round_detail": [],
+  "filtered_non_chinese": 38,
+  "filtered_non_operational": 139,
+  "pending_retry": [],
+  "summary_rest": []
+}
