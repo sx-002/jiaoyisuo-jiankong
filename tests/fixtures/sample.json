@@ -1,0 +1,135 @@
+{
+  "official": [
+    {
+      "name": "fixture_binance",
+      "exchange": "Binance",
+      "layer": "fixture",
+      "title": "Binance 公告：全面暂停提现",
+      "url": "https://www.binance.com/zh-CN/support/announcement/fixture-001",
+      "published_at": "2026-11-17T01:30:00+00:00",
+      "summary": "平台公告：全面暂停所有币种提现",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_okx",
+      "exchange": "OKX",
+      "layer": "fixture",
+      "title": "OKX 维护延期公告",
+      "url": "https://www.okx.com/support/announcement/fixture-002",
+      "published_at": "2026-11-17T02:10:00+00:00",
+      "summary": "原定维护延期，未给出恢复时间",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_noise",
+      "exchange": "Bybit",
+      "layer": "fixture",
+      "title": "Bybit 上线新币活动",
+      "url": "https://announcements.bybit.com/fixture-003",
+      "published_at": "2026-11-17T02:20:00+00:00",
+      "summary": "新币上线，活动详情见原文",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_english",
+      "exchange": "Binance",
+      "layer": "fixture",
+      "title": "Binance USDT withdrawals suspended indefinitely",
+      "url": "https://www.binance.com/en/support/announcement/fixture-004",
+      "published_at": "2026-11-17T02:40:00+00:00",
+      "summary": "Withdrawals suspended on all networks until further notice",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_mixed",
+      "exchange": "Binance",
+      "layer": "fixture",
+      "title": "Binance 暂停部分网络提现",
+      "url": "https://www.binance.com/zh-CN/support/announcement/fixture-005",
+      "published_at": "2026-11-17T02:50:00+00:00",
+      "summary": "Withdrawals resumed for some networks, 中文摘要里带英文说明",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_recovery_time",
+      "exchange": "Bitget",
+      "layer": "fixture",
+      "title": "Bitget USDC-AVAX 网络因钱包维护暂停提现，预计 20:20 恢复",
+      "url": "https://www.bitget.com/support/articles/fixture-006",
+      "published_at": "2026-11-17T03:00:00+00:00",
+      "summary": "钱包维护期间暂停该网络提现，维护完成后恢复",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_dup_generic",
+      "exchange": "Bitget",
+      "layer": "fixture",
+      "title": "交易所的公告",
+      "url": "https://www.bitget.com/support/articles/fixture-008",
+      "published_at": "2026-11-17T03:20:00+00:00",
+      "summary": "Bitget 全面暂停提现",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_dup_specific",
+      "exchange": "Bitget",
+      "layer": "fixture",
+      "title": "Bitget 全面暂停提现（主网维护公告）",
+      "url": "https://www.bitget.com/support/articles/fixture-008?utm_source=search",
+      "published_at": "2026-11-17T03:20:00+00:00",
+      "summary": "Bitget 全面暂停所有币种提现",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_delist",
+      "exchange": "MGBX",
+      "layer": "fixture",
+      "title": "[现货下架]MGBX将下架 W、CLAWNCH 现货交易对的公告",
+      "url": "https://support.mgbx.com/hc/zh-cn/articles/18413286941583",
+      "published_at": "2026-11-17T03:24:22+00:00",
+      "summary": "暂停充值时间：2026 年 11 月 19 日 18:00（SGT）；暂停提现时间：2026 年 11 月 19 日 18:00（SGT）",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_no_recovery_time",
+      "exchange": "Bitget",
+      "layer": "fixture",
+      "title": "Bitget USDT-Arbitrum 暂停提现，恢复时间另告",
+      "url": "https://www.bitget.com/support/articles/fixture-007",
+      "published_at": "2026-11-17T03:10:00+00:00",
+      "summary": "该网络提现暂停，恢复时间另行通知",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_weex_news",
+      "exchange": "WEEX",
+      "layer": "fixture",
+      "title": "欧洲多国遇黑客袭击后，英国找到商用冰箱及冰柜系统漏洞修复方案",
+      "url": "https://www.weex.com/zh-CN/news/detail/123456",
+      "published_at": "2026-11-17T03:30:00+00:00",
+      "summary": "行业资讯报道",
+      "source_name": "fixture",
+      "source_layer": "fixture"
+    }
+  ],
+  "cloud": [
+    {
+      "query": "限制提币",
+      "engine": "exa_public",
+      "url": "https://x.com/example/status/1234567890",
+      "title": "XT 限制提币，用户提不出来",
+      "snippet": "多位用户反馈 XT 提现不到账，客服未回复，未在官方监控名单，仅线索",
+      "published_at": "2026-11-17"
+    }
+  ]
+}
