@@ -5,7 +5,7 @@ on:
     branches: [main]
   schedule:
     # 每小时一次，避开整点（GitHub 整点高负载会丢任务）。
-    - cron: '13 * * * *'
+    - cron: '0 * * * *'  # 对照实验：整点写法，与 sx-001 一致
   workflow_dispatch:
 
 permissions:
