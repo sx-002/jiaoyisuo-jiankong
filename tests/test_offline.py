@@ -233,6 +233,29 @@ class TestOfficialSourceScope(unittest.TestCase):
         ):
             self.assertTrue(rules.is_operational_event(title), title)
 
+    def test_help_page_and_content_site_filtered(self):
+        bianbtc_title = "公告里的「暂停提现」通常意味着什么？先分清三种情况 - Binance 币安中文网"
+        bianbtc_url = "https://www.bianbtc.com/post/978.html"
+        self.assertTrue(rules.is_help_or_content_page(bianbtc_title, bianbtc_url))
+        self.assertFalse(rules.is_operational_event(bianbtc_title))
+        self.assertIsNone(rules.judge(bianbtc_title))
+        # 标题没有科普词，但 URL 是内容站/博客，也要挡。
+        self.assertTrue(rules.is_help_or_content_page(
+            "Binance 暂停提现", "https://www.bianbtc.com/post/979.html"))
+        self.assertTrue(rules.is_help_or_content_page(
+            "某交易所提现异常", "https://someblog.com/news/123"))
+        # 官方公告路径与用户反馈不能误挡。
+        self.assertFalse(rules.is_help_or_content_page(
+            "Bitget 暂停 USDC-Arbitrum One 网络提现，恢复时间另告",
+            "https://www.bitget.com/support/articles/12508313443483"))
+        self.assertFalse(rules.is_help_or_content_page(
+            "XT 限制提币，用户提不出来", "https://x.com/example/status/1234567890"))
+        for title in ("Bitget 暂停 USDT 提币",
+                      "HTX 部分用户须在 11-23 前申请提现授权，未获批可能无法提币"):
+            self.assertFalse(rules.is_help_or_content_page(title, ""))
+            self.assertTrue(rules.is_operational_event(title), title)
+            self.assertIsNotNone(rules.judge(title), title)
+
     def test_weex_fixture_filtered_and_counted(self):
         import tempfile
         with tempfile.TemporaryDirectory() as tmp:
@@ -242,8 +265,10 @@ class TestOfficialSourceScope(unittest.TestCase):
                             report_path=os.path.join(tmp, "report.json"),
                             send=False, no_cloud=True)
             payload = json.loads((Path(tmp) / "report.json").read_text(encoding="utf-8"))
-            self.assertGreaterEqual(payload["filtered_non_operational"], 1)
+            self.assertGreaterEqual(payload["filtered_non_operational"], 2)
             self.assertFalse(any("weex.com/zh-CN/news" in c["url"] for c in payload["candidates"]))
+            self.assertFalse(any("bianbtc.com" in c["url"] for c in payload["candidates"]))
+            self.assertFalse(any("意味着什么" in c["title"] for c in payload["candidates"]))
 
 
 class TestInfrastructure(unittest.TestCase):

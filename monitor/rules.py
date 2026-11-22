@@ -212,9 +212,8 @@ def _level_for(level: str, stage: int, scope: str) -> str:
 
 
 def is_editorial_noise(title: str, summary: str = "") -> bool:
-    """行业解读/科普/访谈/活动推广这类非运营内容。"""
-    text = f"{title or ''} {summary or ''}"
-    return bool(EDITORIAL_RE.search(title or "")) and not HARD_OPERATIONAL_RE.search(text)
+    """行业解读/科普/教程/访谈/活动推广这类非运营内容。"""
+    return bool(HELP_PAGE_TITLE_RE.search(title or "") or EDITORIAL_RE.search(title or ""))
 
 
 def judge(title: str, summary: str = "", body: str = "", *, prior_stage: int = 0,
@@ -347,22 +346,60 @@ EDITORIAL_RE = re.compile(
     r"科普|一文读懂|解读|观点|访谈|专访|人物|故事|教程|指南|百科|研究|报告|复盘|"
     r"预测|展望|盘点|盘点|如何理解|背后|意味着什么|深度|专栏|评论|"
     r"活动预告|活动|空投|抽奖|征文|AMA|直播|上新|产品发布|推广", re.I)
-#: 强运营信号：有这些即使标题带「解读」也算运营事件（避免误杀）。
-HARD_OPERATIONAL_RE = re.compile(
-    r"暂停|恢复|维护|升级|登录|下架|限额|冻结|被黑|被盗|破产|跑路|清盘|"
-    r"提币|提现|充值|充提|客服失联", re.I)
+#: 帮助页/科普/教程标题：命中就挡，正文里出现「暂停」也不能救回。
+#: bianbtc「公告里的暂停提现通常意味着什么？先分清三种情况」就是被这条挡下的。
+HELP_PAGE_TITLE_RE = re.compile(
+    r"意味着什么|先分清|科普|教程|怎么回事|怎么办|如何理解|怎么理解|"
+    r"一文读懂|一文看懂|什么是|如何判断|怎么判断|常见问题|问答|"
+    r"how[\s-]?to|what[\s-]?is|tutorial|faq|explained?", re.I)
+
+#: 内容站/博客/资讯文章路径：官方公告路径先豁免，其余按内容页挡。
+CONTENT_PAGE_PATH_RE = re.compile(
+    r"/(?:post|posts|article|blog|news|learn|academy|guide|guides|tutorial|tutorials|"
+    r"faq|help|wiki|edu|education|story|stories|insight|research)(?:/|$|\.)", re.I)
+
+#: 已知非官方内容站：没有官方公告路径就不推。
+CONTENT_SITE_HOSTS = (
+    "bianbtc.com", "8btc.com", "chaincatcher.com", "odaily.news",
+    "panewslab.com", "theblockbeats.info", "jinse.cn", "blockbeats.info",
+)
+
+#: 官方公告/帮助中心路径：即使带 news/article 字样也算官方，避免误杀真公告。
+OFFICIAL_ANNOUNCEMENT_PATH_RE = re.compile(
+    r"/(?:announcement|announcements|support|notice|notices|product-launch|"
+    r"newsflash|gong-gao|hc|status|incidents)(?:/|$)", re.I)
+
+
+def is_help_or_content_page(title: str, url: str = "") -> bool:
+    """帮助页/科普/教程/内容站文章：命中即挡，运营词不能救回。
+
+    真实运营事件（暂停提现/恢复/维护/下架/监管）标题不含这些说法；
+    官方公告路径（/support/announcement、/hc/... 等）永远豁免。
+    """
+    if HELP_PAGE_TITLE_RE.search(title or ""):
+        return True
+    from urllib.parse import urlsplit
+    parts = urlsplit(url or "")
+    path = parts.path or ""
+    host = (parts.hostname or "").lower()
+    if OFFICIAL_ANNOUNCEMENT_PATH_RE.search(path):
+        return False
+    if host and any(host == h or host.endswith("." + h) for h in CONTENT_SITE_HOSTS):
+        return True
+    return bool(CONTENT_PAGE_PATH_RE.search(path))
 
 
 def is_operational_event(title: str, summary: str = "") -> bool:
     """只保留运营事件（提现/充值/维护/登录/下架/限额/监管/安全事故）。
 
     行业解读、技术科普、市场观点、人物访谈、活动预告、产品推广、空投活动
-    一律不算——它们会把真正的提现异常埋掉。
+    一律不算——它们会把真正的提现异常埋掉。帮助页/科普标题即使带「暂停提现」
+    也不放行（否则 bianbtc 这类文章会冒充高风险推送）。
     """
     text = f"{title or ''} {summary or ''}"
     if not OPERATIONAL_RE.search(text):
         return False
-    if EDITORIAL_RE.search(title or "") and not HARD_OPERATIONAL_RE.search(text):
+    if HELP_PAGE_TITLE_RE.search(title or "") or EDITORIAL_RE.search(title or ""):
         return False
     return True
 

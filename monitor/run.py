@@ -119,6 +119,12 @@ def run(*, fixtures: str = "", state_path: str = "state/state.json", report_path
             continue
         if not item.exchange:
             continue
+        # 帮助页/科普/教程/内容站文章先挡（标题或 URL 命中即挡）；
+        # bianbtc 这类非官方内容站即使标题带「暂停提现」也不推。
+        if rules.is_help_or_content_page(item.title, item.url):
+            filtered_non_operational += 1
+            st.mark_pushed(item, rules.non_operational_decision(), "帮助页/科普")
+            continue
         # 内容层：只要运营事件（提现/充值/维护/登录/下架/限额/监管/安全事故），
         # 行业新闻、科普、访谈、活动推广直接挡掉并计数。
         if not rules.is_operational_event(item.title, item.summary):

@@ -120,6 +120,17 @@
       "summary": "行业资讯报道",
       "source_name": "fixture",
       "source_layer": "fixture"
+    },
+    {
+      "name": "fixture_content_site",
+      "exchange": "Binance",
+      "layer": "fixture",
+      "title": "公告里的「暂停提现」通常意味着什么？先分清三种情况 - Binance 币安中文网",
+      "url": "https://www.bianbtc.com/post/978.html",
+      "published_at": "2026-11-17T03:40:00+00:00",
+      "summary": "科普文章，讲三种暂停提现的情形",
+      "source_name": "fixture",
+      "source_layer": "fixture"
     }
   ],
   "cloud": [
