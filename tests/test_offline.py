@@ -377,6 +377,23 @@ class TestState(unittest.TestCase):
         self.assertEqual(cloud.detect_exchange("Binance withdrawal suspended"), "Binance")
         self.assertEqual(cloud.detect_exchange("extract non-account problem"), "")
 
+    def test_anysearch_endpoint_is_com(self):
+        self.assertEqual(cloud.ANYSEARCH_DEFAULT_BASE_URL, "https://api.anysearch.com")
+
+    def test_anysearch_json_parsed_with_date(self):
+        payload = json.dumps({"code": 0, "data": {"results": [{
+            "title": "Binance 暂停提现",
+            "url": "https://x.com/user/status/1",
+            "snippet": "用户反馈提现不到账 date: Nov 20, 2026",
+        }]}})
+        hits = cloud._hits_from_text(payload, "暂停提现", "anysearch")
+        self.assertEqual(len(hits), 1)
+        self.assertEqual(hits[0].url, "https://x.com/user/status/1")
+        self.assertTrue(hits[0].published_at.startswith("2026-11-20"))
+        items = cloud.hits_to_items(hits, window_start=datetime(2026, 11, 19, tzinfo=timezone.utc),
+                                    window_end=datetime(2026, 11, 21, tzinfo=timezone.utc))
+        self.assertEqual(len(items), 1)
+
     def test_exa_block_parsing(self):
         text = ("Title: Binance 暂停提现\nURL: https://example.com/a\nPublished: 2026-11-17\n"
                 "Highlights:\n用户反馈提现不到账")

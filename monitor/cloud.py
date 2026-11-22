@@ -17,6 +17,7 @@ from urllib.parse import quote
 from . import http, rules, sources
 
 EXA_MCP = "https://mcp.exa.ai/mcp"
+ANYSEARCH_DEFAULT_BASE_URL = "https://api.anysearch.com"
 XACTIONS_MCP = "https://xactions.app/mcp"
 XREADER_API = "https://xreader.leolabs.me/api/read"
 
@@ -189,6 +190,26 @@ def mcp_call(endpoint: str, tool_name: str, arguments: dict, *, timeout: float =
 _MD_LINK_RE = re.compile(r"\[([^\]\n]{4,200})\]\((https?://[^\s)]+)\)")
 _URL_RE = re.compile(r"https?://[^\s<>\"']{10,500}")
 
+_MONTHS = {name: idx for idx, name in enumerate(
+    ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"),
+    start=1)}
+
+
+def _json_date(*texts: str) -> str:
+    """Anysearch 的 JSON 结果没有发布时间字段，从标题/摘要里补一个明确日期。"""
+    blob = " ".join(str(item or "") for item in texts)
+    found = re.search(r"20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}", blob)
+    if found:
+        year, month, day = re.split(r"[-/.]", found.group(0))
+        return f"{int(year):04d}-{int(month):02d}-{int(day):02d}T00:00:00+00:00"
+    found = re.search(r"\b([A-Za-z]{3,9})\.?\s+(\d{1,2}),\s*(20\d{2})\b", blob)
+    if found:
+        month = _MONTHS.get(found.group(1)[:3].lower())
+        if month:
+            return f"{found.group(3)}-{month:02d}-{int(found.group(2)):02d}T00:00:00+00:00"
+    found = re.search(r"\d+\s*(?:minute|hour|day)s?\s*ago", blob, re.I)
+    return found.group(0).lower() if found else ""
+
 
 def _parse_exa_block(text: str, query: str, engine: str) -> List[SearchHit]:
     """Exa 公共 MCP 返回的是 Title/URL/Published/Highlights 文本块，逐块拆成干净命中。"""
@@ -229,9 +250,13 @@ def _hits_from_text(text: str, query: str, engine: str) -> List[SearchHit]:
                 url = str(value.get("url") or value.get("link") or "")
                 if url.startswith("http") and url not in seen:
                     seen.add(url)
-                    hits.append(SearchHit(query, engine, url,
-                                          str(value.get("title") or value.get("name") or "")[:300],
-                                          str(value.get("snippet") or value.get("text") or value.get("content") or "")[:800]))
+                    title = str(value.get("title") or value.get("name") or "")
+                    snippet = str(value.get("snippet") or value.get("text")
+                                  or value.get("content") or "")
+                    published = (str(value.get("published") or value.get("date") or "")
+                                 or _json_date(title, snippet))
+                    hits.append(SearchHit(query, engine, url, title[:300],
+                                          snippet[:800], published[:60]))
                 for child in value.values():
                     walk(child)
             elif isinstance(value, list):
@@ -271,7 +296,7 @@ def _anysearch_keys() -> List[str]:
 
 
 def anysearch_search(query: str, key: str, since_text: str) -> List[SearchHit]:
-    url = f"{os.environ.get('ANYSEARCH_BASE_URL', 'https://api.anysearch.ai').rstrip('/')}/v1/search"
+    url = f"{os.environ.get('ANYSEARCH_BASE_URL', ANYSEARCH_DEFAULT_BASE_URL).rstrip('/')}/v1/search"
     scoped_query = (f"{query}；只返回 {since_text} 之后新发布的内容，"
                     f"排除旧文章、帮助页、科普文和常驻页面")
     payload = json.dumps({"query": scoped_query, "max_results": 5}).encode()
