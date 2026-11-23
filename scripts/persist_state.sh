@@ -26,7 +26,7 @@ git checkout -B "$STATE_BRANCH" "origin/$STATE_BRANCH"
 mkdir -p state
 cp "$TMP/state.json" state/state.json
 cp "$TMP/last-report.json" state/last-report.json
-git add state/state.json state/last-report.json
+git add -f state/state.json state/last-report.json
 if git diff --cached --quiet; then
   echo "状态无变化，无需提交。"
   exit 0
