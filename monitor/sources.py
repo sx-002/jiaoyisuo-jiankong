@@ -92,9 +92,9 @@ SOURCES: List[OfficialSource] = [
     OfficialSource("mexc_delisting_api", "MEXC", "api",
         "https://www.mexc.com/help/announce/api/en-US/section/15425930840822/articles", "mexc",
         "下架与风险提示"),
-    OfficialSource("mexc_telegram", "MEXC", "html",
+    OfficialSource("mexc_telegram", "MEXC", "telegram_preview",
         "https://t.me/s/MEXC_Announcement", "html",
-        "公开预览兜底"),
+        "公开预览兜底（帖子在 div 里，需专用解析）"),
 ]
 
 OFFICIAL_EXCHANGES = sorted({s.exchange for s in SOURCES})
@@ -219,6 +219,10 @@ _NAV_TITLE_RE = re.compile(
     r"^(?:help\s*center|announcement\s*center|support\s*center|support|announcements?|"
     r"帮助中心|公告中心|支持中心|客服中心|更多|更多公告|查看全部)$", re.I)
 _DATE_RE = re.compile(r"(20\d{2}[-/年]\d{1,2}[-/月]\d{1,2}(?:[ 日T]\d{1,2}:\d{2}(?::\d{2})?)?)")
+# Telegram 公开预览页：帖子在 div.tgme_widget_message 里，不是 a 标签，通用 HTML 解析抓不到。
+_TG_POST_RE = re.compile(r'data-post="(?P<channel>[^"/]+)/(?P<pid>\d+)"')
+_TG_TEXT_RE = re.compile(r'<div class="tgme_widget_message_text[^"]*"[^>]*>(.*?)</div>', re.I | re.S)
+_TG_TIME_RE = re.compile(r'<time[^>]*datetime="([^"]+)"', re.I)
 
 
 #: 官方公告/帮助中心路径：HTML 列表页只收这些链接。
@@ -268,6 +272,41 @@ def _html_items(text: str, exchange: str, src: OfficialSource) -> List[Item]:
             break
     if not items:
         raise http.FetchFailure("HTML 列表没有解析出任何公告链接，疑似需要渲染", "low_quality")
+    return items
+
+
+def _telegram_preview_items(text: str, src: OfficialSource) -> List[Item]:
+    """Telegram 公开预览页解析：t.me/s/<频道> 的帖子正文在 div 里。
+
+    通用 HTML 解析只找 a 标签，这里按 data-post 切块，再取正文与时间。
+    """
+    marks = list(_TG_POST_RE.finditer(text))
+    items: List[Item] = []
+    seen = set()
+    for index, mark in enumerate(marks):
+        start = mark.end()
+        end = marks[index + 1].start() if index + 1 < len(marks) else min(len(text), start + 20000)
+        chunk = text[start:end]
+        body_match = _TG_TEXT_RE.search(chunk)
+        if not body_match:
+            continue
+        body = http.strip_tags(body_match.group(1))
+        if len(body) < 8:
+            continue
+        link = f"https://t.me/{mark.group('channel')}/{mark.group('pid')}"
+        if link in seen:
+            continue
+        seen.add(link)
+        time_match = _TG_TIME_RE.search(chunk)
+        published = _timestamp(time_match.group(1)) if time_match else ""
+        title = body.split("。")[0].strip()[:160] or body[:160]
+        items.append(Item(src.exchange, title, link, published, summary=body[:400],
+                          source_name=src.name, source_layer="html",
+                          extra={"date_precision": "minute" if published else "day"}))
+        if len(items) >= 20:
+            break
+    if not items:
+        raise http.FetchFailure("Telegram 预览页没有解析出帖子", "low_quality")
     return items
 
 
@@ -380,6 +419,8 @@ def parse_payload(src: OfficialSource, result: http.FetchResult) -> List[Item]:
         return _yubit_items(result.data, src)
     if src.kind == "html":
         return _html_items(result.text(), src.exchange, src)
+    if src.kind == "telegram_preview":
+        return _telegram_preview_items(result.text(), src)
     data = result.json()
     if src.kind == "binance":
         return _binance_items(data, src)
