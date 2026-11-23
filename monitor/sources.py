@@ -92,8 +92,8 @@ SOURCES: List[OfficialSource] = [
     OfficialSource("mexc_delisting_api", "MEXC", "api",
         "https://www.mexc.com/help/announce/api/en-US/section/15425930840822/articles", "mexc",
         "下架与风险提示"),
-    OfficialSource("mexc_telegram", "MEXC", "telegram_preview",
-        "https://t.me/s/MEXC_Announcement", "html",
+    OfficialSource("mexc_telegram", "MEXC", "html",
+        "https://t.me/s/MEXC_Announcement", "telegram_preview",
         "公开预览兜底（帖子在 div 里，需专用解析）"),
 ]
 
