@@ -1,6 +1,6 @@
 {
-  "started_at": "2026-11-22T07:14:06.513909+00:00",
-  "finished_at": "2026-11-22T07:14:20.328013+00:00",
+  "started_at": "2026-11-23T04:10:51.139864+00:00",
+  "finished_at": "2026-11-23T04:10:59.511953+00:00",
   "gap_minutes": -1,
   "mode": "send",
   "sources": [
@@ -12,7 +12,7 @@
       "health": "ok",
       "error": "",
       "items": 30,
-      "duration_ms": 121
+      "duration_ms": 260
     },
     {
       "name": "okx_api",
@@ -22,7 +22,7 @@
       "health": "ok",
       "error": "",
       "items": 20,
-      "duration_ms": 352
+      "duration_ms": 319
     },
     {
       "name": "bybit_api",
@@ -32,7 +32,7 @@
       "health": "partial_failure",
       "error": "HTTP Error 403: Forbidden",
       "items": 0,
-      "duration_ms": 172
+      "duration_ms": 151
     },
     {
       "name": "bitget_html",
@@ -42,7 +42,7 @@
       "health": "ok",
       "error": "",
       "items": 22,
-      "duration_ms": 320
+      "duration_ms": 541
     },
     {
       "name": "gate_blocked",
@@ -62,7 +62,7 @@
       "health": "ok",
       "error": "",
       "items": 25,
-      "duration_ms": 148
+      "duration_ms": 76
     },
     {
       "name": "coinbase_status_json",
@@ -72,7 +72,7 @@
       "health": "ok",
       "error": "",
       "items": 1,
-      "duration_ms": 153
+      "duration_ms": 89
     },
     {
       "name": "weex_html",
@@ -82,7 +82,7 @@
       "health": "ok",
       "error": "",
       "items": 13,
-      "duration_ms": 1009
+      "duration_ms": 1027
     },
     {
       "name": "yubit_sitemap",
@@ -92,7 +92,7 @@
       "health": "ok",
       "error": "",
       "items": 20,
-      "duration_ms": 5710
+      "duration_ms": 2122
     },
     {
       "name": "deepcoin_html",
@@ -102,7 +102,7 @@
       "health": "partial_failure",
       "error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
       "items": 0,
-      "duration_ms": 909
+      "duration_ms": 189
     },
     {
       "name": "easicoin_zendesk",
@@ -112,7 +112,7 @@
       "health": "ok",
       "error": "",
       "items": 5,
-      "duration_ms": 468
+      "duration_ms": 104
     },
     {
       "name": "bitbaby_html",
@@ -122,7 +122,7 @@
       "health": "ok",
       "error": "",
       "items": 14,
-      "duration_ms": 1759
+      "duration_ms": 844
     },
     {
       "name": "hotcoin_html",
@@ -132,17 +132,17 @@
       "health": "ok",
       "error": "",
       "items": 27,
-      "duration_ms": 261
+      "duration_ms": 277
     },
     {
       "name": "bittap_zendesk",
       "exchange": "BitTap",
       "layer": "api",
-      "status": "ok",
-      "health": "ok",
-      "error": "",
-      "items": 5,
-      "duration_ms": 484
+      "status": "login_wall",
+      "health": "partial_failure",
+      "error": "疑似登录墙/验证页",
+      "items": 0,
+      "duration_ms": 189
     },
     {
       "name": "mgbx_zendesk",
@@ -152,7 +152,7 @@
       "health": "ok",
       "error": "",
       "items": 5,
-      "duration_ms": 496
+      "duration_ms": 191
     },
     {
       "name": "mexc_api",
@@ -162,7 +162,7 @@
       "health": "ok",
       "error": "",
       "items": 10,
-      "duration_ms": 329
+      "duration_ms": 260
     },
     {
       "name": "mexc_delisting_api",
@@ -172,7 +172,7 @@
       "health": "ok",
       "error": "",
       "items": 10,
-      "duration_ms": 309
+      "duration_ms": 259
     },
     {
       "name": "mexc_telegram",
@@ -182,7 +182,7 @@
       "health": "partial_failure",
       "error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
       "items": 0,
-      "duration_ms": 438
+      "duration_ms": 637
     }
   ],
   "source_failures": {
@@ -190,19 +190,25 @@
       "count": 1,
       "error_type": "blocked",
       "last_error": "HTTP Error 403: Forbidden",
-      "at": "2026-11-22T07:14:18.082876+00:00"
+      "at": "2026-11-23T04:10:58.230425+00:00"
     },
     "deepcoin_html": {
       "count": 1,
       "error_type": "low_quality",
       "last_error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
-      "at": "2026-11-22T07:14:18.082900+00:00"
+      "at": "2026-11-23T04:10:58.230450+00:00"
+    },
+    "bittap_zendesk": {
+      "count": 1,
+      "error_type": "login_wall",
+      "last_error": "疑似登录墙/验证页",
+      "at": "2026-11-23T04:10:58.230458+00:00"
     },
     "mexc_telegram": {
       "count": 1,
       "error_type": "low_quality",
       "last_error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
-      "at": "2026-11-22T07:14:18.082910+00:00"
+      "at": "2026-11-23T04:10:58.230464+00:00"
     }
   },
   "all_sources_failed": false,
@@ -221,14 +227,14 @@
     "easicoin_zendesk": "ok",
     "bitbaby_html": "ok",
     "hotcoin_html": "ok",
-    "bittap_zendesk": "ok",
+    "bittap_zendesk": "partial_failure",
     "mgbx_zendesk": "ok",
     "mexc_api": "ok",
     "mexc_delisting_api": "ok",
     "mexc_telegram": "partial_failure"
   },
   "cloud": {
-    "since": "2026-11-19 06:44 UTC",
+    "since": "2026-11-20 03:40 UTC",
     "queries": [
       "交易所跑路",
       "限制提币",
@@ -244,41 +250,22 @@
       "Coinbase maintenance extended"
     ],
     "engine_counts": {
-      "exa_public": 12
+      "exa_public": 11,
+      "anysearch": 1
     },
-    "hits": 57,
-    "errors": [],
+    "hits": 53,
+    "errors": [
+      "Bitget 登录不了: RuntimeError MCP web_search_exa 失败: provider_error HTTP Error 429: Too Many Requests → Anysearch 兜底成功"
+    ],
     "skipped": []
   },
-  "candidates": [
-    {
-      "exchange": "Binance",
-      "title": "公告里的「暂停提现」通常意味着什么？先分清三种情况 - Binance 币安中文网",
-      "url": "https://www.bianbtc.com/post/978.html",
-      "status": "新增",
-      "decision": {
-        "level": "high",
-        "stage": "阶段3 全面暂停",
-        "scope": "全站",
-        "reason": "命中规则 R05_withdraw_suspended：暂停提现；阶段 3；全站；未给恢复时间也未给限额数字，按高风险处理；独立来源 2 个/独立用户 0 个，达到升级门槛",
-        "rule": "R05_withdraw_suspended",
-        "signal": "暂停提币/提现",
-        "resolved": false,
-        "has_details": true,
-        "recovery": "恢复时间另告",
-        "limit": "",
-        "risk_limit": ""
-      }
-    }
-  ],
-  "pushed": [
-    "Binance｜公告里的「暂停提现」通常意味着什么？先分清三种情况 - Binance 币安中文网"
-  ],
+  "candidates": [],
+  "pushed": [],
   "push_failed": [],
   "deduped_same_round": 0,
   "deduped_same_round_detail": [],
-  "filtered_non_chinese": 38,
-  "filtered_non_operational": 139,
+  "filtered_non_chinese": 33,
+  "filtered_non_operational": 150,
   "pending_retry": [],
   "summary_rest": []
 }
