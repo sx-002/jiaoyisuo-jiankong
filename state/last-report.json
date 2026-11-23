@@ -1,7 +1,7 @@
 {
-  "started_at": "2026-11-23T04:10:51.139864+00:00",
-  "finished_at": "2026-11-23T04:10:59.511953+00:00",
-  "gap_minutes": -1,
+  "started_at": "2026-11-23T14:30:06.674112+00:00",
+  "finished_at": "2026-11-23T14:30:31.577442+00:00",
+  "gap_minutes": 619.3,
   "mode": "send",
   "sources": [
     {
@@ -12,7 +12,7 @@
       "health": "ok",
       "error": "",
       "items": 30,
-      "duration_ms": 260
+      "duration_ms": 316
     },
     {
       "name": "okx_api",
@@ -22,7 +22,7 @@
       "health": "ok",
       "error": "",
       "items": 20,
-      "duration_ms": 319
+      "duration_ms": 291
     },
     {
       "name": "bybit_api",
@@ -32,7 +32,7 @@
       "health": "partial_failure",
       "error": "HTTP Error 403: Forbidden",
       "items": 0,
-      "duration_ms": 151
+      "duration_ms": 184
     },
     {
       "name": "bitget_html",
@@ -42,7 +42,7 @@
       "health": "ok",
       "error": "",
       "items": 22,
-      "duration_ms": 541
+      "duration_ms": 572
     },
     {
       "name": "gate_blocked",
@@ -62,7 +62,7 @@
       "health": "ok",
       "error": "",
       "items": 25,
-      "duration_ms": 76
+      "duration_ms": 114
     },
     {
       "name": "coinbase_status_json",
@@ -72,7 +72,7 @@
       "health": "ok",
       "error": "",
       "items": 1,
-      "duration_ms": 89
+      "duration_ms": 109
     },
     {
       "name": "weex_html",
@@ -82,7 +82,7 @@
       "health": "ok",
       "error": "",
       "items": 13,
-      "duration_ms": 1027
+      "duration_ms": 441
     },
     {
       "name": "yubit_sitemap",
@@ -92,7 +92,7 @@
       "health": "ok",
       "error": "",
       "items": 20,
-      "duration_ms": 2122
+      "duration_ms": 19089
     },
     {
       "name": "deepcoin_html",
@@ -102,7 +102,7 @@
       "health": "partial_failure",
       "error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
       "items": 0,
-      "duration_ms": 189
+      "duration_ms": 1619
     },
     {
       "name": "easicoin_zendesk",
@@ -112,7 +112,7 @@
       "health": "ok",
       "error": "",
       "items": 5,
-      "duration_ms": 104
+      "duration_ms": 506
     },
     {
       "name": "bitbaby_html",
@@ -122,7 +122,7 @@
       "health": "ok",
       "error": "",
       "items": 14,
-      "duration_ms": 844
+      "duration_ms": 1101
     },
     {
       "name": "hotcoin_html",
@@ -132,17 +132,17 @@
       "health": "ok",
       "error": "",
       "items": 27,
-      "duration_ms": 277
+      "duration_ms": 191
     },
     {
       "name": "bittap_zendesk",
       "exchange": "BitTap",
       "layer": "api",
-      "status": "login_wall",
-      "health": "partial_failure",
-      "error": "疑似登录墙/验证页",
-      "items": 0,
-      "duration_ms": 189
+      "status": "ok",
+      "health": "ok",
+      "error": "",
+      "items": 5,
+      "duration_ms": 608
     },
     {
       "name": "mgbx_zendesk",
@@ -152,7 +152,7 @@
       "health": "ok",
       "error": "",
       "items": 5,
-      "duration_ms": 191
+      "duration_ms": 786
     },
     {
       "name": "mexc_api",
@@ -162,7 +162,7 @@
       "health": "ok",
       "error": "",
       "items": 10,
-      "duration_ms": 260
+      "duration_ms": 315
     },
     {
       "name": "mexc_delisting_api",
@@ -172,7 +172,7 @@
       "health": "ok",
       "error": "",
       "items": 10,
-      "duration_ms": 259
+      "duration_ms": 204
     },
     {
       "name": "mexc_telegram",
@@ -182,33 +182,27 @@
       "health": "partial_failure",
       "error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
       "items": 0,
-      "duration_ms": 637
+      "duration_ms": 725
     }
   ],
   "source_failures": {
     "bybit_api": {
-      "count": 1,
+      "count": 2,
       "error_type": "blocked",
       "last_error": "HTTP Error 403: Forbidden",
-      "at": "2026-11-23T04:10:58.230425+00:00"
+      "at": "2026-11-23T14:30:30.658427+00:00"
     },
     "deepcoin_html": {
-      "count": 1,
+      "count": 2,
       "error_type": "low_quality",
       "last_error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
-      "at": "2026-11-23T04:10:58.230450+00:00"
-    },
-    "bittap_zendesk": {
-      "count": 1,
-      "error_type": "login_wall",
-      "last_error": "疑似登录墙/验证页",
-      "at": "2026-11-23T04:10:58.230458+00:00"
+      "at": "2026-11-23T14:30:30.658452+00:00"
     },
     "mexc_telegram": {
-      "count": 1,
+      "count": 2,
       "error_type": "low_quality",
       "last_error": "HTML 列表没有解析出任何公告链接，疑似需要渲染",
-      "at": "2026-11-23T04:10:58.230464+00:00"
+      "at": "2026-11-23T14:30:30.658465+00:00"
     }
   },
   "all_sources_failed": false,
@@ -227,14 +221,14 @@
     "easicoin_zendesk": "ok",
     "bitbaby_html": "ok",
     "hotcoin_html": "ok",
-    "bittap_zendesk": "partial_failure",
+    "bittap_zendesk": "ok",
     "mgbx_zendesk": "ok",
     "mexc_api": "ok",
     "mexc_delisting_api": "ok",
     "mexc_telegram": "partial_failure"
   },
   "cloud": {
-    "since": "2026-11-20 03:40 UTC",
+    "since": "2026-11-23 03:40 UTC",
     "queries": [
       "交易所跑路",
       "限制提币",
@@ -242,21 +236,18 @@
       "无法提币",
       "提币不到账",
       "交易所维护",
-      "Binance 提现暂停",
       "BitTap 暂停提币",
       "Bitbaby 维护延期",
       "Bitget 登录不了",
       "Bybit withdrawal suspended",
-      "Coinbase maintenance extended"
+      "Coinbase maintenance extended",
+      "Deepcoin 提现暂停"
     ],
     "engine_counts": {
-      "exa_public": 11,
-      "anysearch": 1
+      "exa_public": 12
     },
-    "hits": 53,
-    "errors": [
-      "Bitget 登录不了: RuntimeError MCP web_search_exa 失败: provider_error HTTP Error 429: Too Many Requests → Anysearch 兜底成功"
-    ],
+    "hits": 56,
+    "errors": [],
     "skipped": []
   },
   "candidates": [],
@@ -264,8 +255,8 @@
   "push_failed": [],
   "deduped_same_round": 0,
   "deduped_same_round_detail": [],
-  "filtered_non_chinese": 33,
-  "filtered_non_operational": 150,
+  "filtered_non_chinese": 30,
+  "filtered_non_operational": 155,
   "pending_retry": [],
   "summary_rest": []
 }
