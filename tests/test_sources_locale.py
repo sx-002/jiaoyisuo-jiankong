@@ -21,7 +21,7 @@ class TestChineseLocale(unittest.TestCase):
         payload = {
             "data": {
                 "catalogs": [
-                    {"articles": [{"code": "abc123", "title": "币安将上线 XXX", "releaseDate": 1700000000000}]}
+                    {"articles": [{"code": "b3eb06ad744b4398911a1b2c3d4e5f60", "title": "币安将上线 XXX", "releaseDate": 1700000000000}]}
                 ]
             }
         }
