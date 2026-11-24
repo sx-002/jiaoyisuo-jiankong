@@ -51,17 +51,17 @@ RULES: List[Tuple[str, str, str, int, str]] = [
     ("R01_exit_scam", r"(?<!没)(?<!沒)(?<!不会)(?<!不會)(?<!否认)(?<!否認)跑路|卷款|exit scam|rug pull|"
      r"insolvency|破产清算|有序停运|停止运营|关停提现",
      HIGH, 5, "跑路/停运"),
-    ("R02_login_down", r"登录不了|无法登录|登不上|app.*打不开|官网.*打不开|login failed|site unavailable|can'?t log in",
+    ("R02_login_down", r"登录不了|无法登录|登不上|app[^。！？]{0,12}打不开|官网[^。！？]{0,12}打不开|login failed|site unavailable|can'?t log in",
      HIGH, 5, "登录异常"),
     ("R03_hacked", r"被黑|被盗|黑客|hacked|exploit|breach|stolen|安全事件",
      HIGH, 4, "安全事件"),
-    ("R04_regulatory_freeze", r"监管冻结|冻结账户|资产冻结|seized|freeze|监管.*查封|美国管控|OFAC|"
+    ("R04_regulatory_freeze", r"监管冻结|冻结账户|资产冻结|seized|freeze|监管[^。！？]{0,16}查封|美国管控|OFAC|"
      r"提现授权|提币授权|未获批.*无法提币",
      HIGH, 4, "监管冻结"),
     ("R05_withdraw_suspended", r"暂停.{0,40}(提币|提现|充提|充值|充值提现)|停止.{0,40}(提币|提现)|全面暂停|"
      r"withdrawal[s]? (suspended|paused|halted|disabled)|deposit[s]? disabled|withdrawals? closed",
      HIGH, 3, "暂停提币/提现"),
-    ("R06_support_gone", r"客服失联|客服不回复|工单.*无人|support not responding|support.*unavailable|社群禁言",
+    ("R06_support_gone", r"客服失联|客服不回复|工单[^。！？]{0,20}无人|support not responding|support[^.]{0,20}unavailable|社群禁言",
      HIGH, 4, "客服失联"),
     ("R07_withdraw_delay", r"提现延迟|提币延迟|提现不到账|提币不到账|延迟排队|审核中|提现失败|提币失败|"
      r"withdrawal[s]? (delayed|pending|failed|stalled)|funds stuck|not credited|提幣卡單",
@@ -73,10 +73,10 @@ RULES: List[Tuple[str, str, str, int, str]] = [
      r"仅允许.{0,8}小额提现|小额提现|单日.{0,6}(?:上限|限额)|每日.{0,6}(?:上限|限额)|"
      r"手续费上调|withdrawal limit|withdrawal fee increased|fee increase",
      MEDIUM, 1, "提现限额"),
-    ("R10_reserve_redeem", r"储备金|储备率下降|赎回关闭|暂停赎回|高息理财|理财.*加息|"
+    ("R10_reserve_redeem", r"储备金|储备率下降|赎回关闭|暂停赎回|高息理财|理财[^。！？]{0,12}加息|"
      r"proof of reserves|redeem (closed|disabled)",
      MEDIUM, 1, "储备金/理财"),
-    ("R11_token_site", r"平台币暴跌|平台币.*脱锚|depeg|token.*collapse",
+    ("R11_token_site", r"平台币暴跌|平台币[^。！？]{0,12}脱锚|depeg|token[^.]{0,20}collapse",
      MEDIUM, 1, "平台币异常"),
     ("R12_maintenance", r"维护升级|系统升级|维护|maintenance|upgrade|scheduled",
      LOW, 0, "常规维护"),

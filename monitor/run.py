@@ -18,6 +18,8 @@ from . import cloud, http, rules, sources, state as state_mod, telegram
 CST = timezone(timedelta(hours=8))
 
 MAX_PUSH = 10
+# 推送闸门：公告发布日期超过这个小时数就不推（防跑路要的是「现在出事」，不是补发历史）。
+MAX_AGE_HOURS = 72
 EXIT_OK, EXIT_PARTIAL, EXIT_ALL_FAILED, EXIT_CONFIG = 0, 1, 2, 5
 TITLE_HINT = [pattern for _, pattern, _, _, _ in rules.RULES] + [rules.RESOLVED_RE]
 
@@ -114,6 +116,7 @@ def run(*, fixtures: str = "", state_path: str = "state/state.json", report_path
     body_reads = 0
     filtered_non_chinese = 0
     filtered_non_operational = 0
+    filtered_too_old = 0
     for item in items:
         if not item.url or not item.url.startswith(("http://", "https://")):
             continue
@@ -131,6 +134,20 @@ def run(*, fixtures: str = "", state_path: str = "state/state.json", report_path
             filtered_non_operational += 1
             st.mark_pushed(item, rules.non_operational_decision(), "非运营")
             continue
+        # 推送闸门：公告发布日期太久的不推（实测曾把两个月前的旧公告当新事件推出去）。
+        # 云端搜索结果已按搜索窗口过滤过；fixture 是离线演示数据，都不参与这道闸门。
+        gate_hours = int(os.environ.get("MONITOR_MAX_AGE_HOURS", MAX_AGE_HOURS) or MAX_AGE_HOURS)
+        if item.published_at and gate_hours > 0 and item.source_layer not in ("fixture", "cloud"):
+            try:
+                published = datetime.fromisoformat(str(item.published_at).replace("Z", "+00:00"))
+                if published.tzinfo is None:
+                    published = published.replace(tzinfo=timezone.utc)
+                if (datetime.now(timezone.utc) - published).total_seconds() > gate_hours * 3600:
+                    filtered_too_old += 1
+                    st.mark_pushed(item, rules.non_operational_decision(), "过旧")
+                    continue
+            except (ValueError, TypeError):
+                pass
         # 中文过滤：纯英文条目挡在推送之前（只影响是否推送，不改中文条目的分级与去重）。
         if rules.is_non_chinese(item.title, item.summary):
             filtered_non_chinese += 1
@@ -239,6 +256,7 @@ def run(*, fixtures: str = "", state_path: str = "state/state.json", report_path
         "deduped_same_round_detail": merged_same_round,
         "filtered_non_chinese": filtered_non_chinese,
         "filtered_non_operational": filtered_non_operational,
+        "filtered_too_old": filtered_too_old,
         "pending_retry": [{"exchange": e.get("exchange", ""), "title": e.get("title", ""),
                            "url": e.get("url", ""), "last_error": e.get("last_error", "")}
                           for e in st.pending_list()],
