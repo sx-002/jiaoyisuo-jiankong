@@ -56,7 +56,8 @@ class OfficialSource:
 SOURCES: List[OfficialSource] = [
     OfficialSource("binance_api", "Binance", "api",
         "https://www.binance.com/bapi/composite/v1/public/cms/article/list/query?type=1&pageNo=1&pageSize=20",
-        "binance", "公告页 202 空内容，API 已实测可用"),
+        "binance", "公告页 202 空内容，API 已实测可用；带中文语言头返回中文标题",
+        headers={"Accept-Language": "zh-CN,zh;q=0.9", "lang": "zh-CN"}),
     OfficialSource("okx_api", "OKX", "api",
         "https://www.okx.com/api/v5/support/announcements", "okx", "pTime 毫秒，annType 区分充提"),
     OfficialSource("bybit_api", "Bybit", "api",
@@ -398,7 +399,7 @@ def _binance_items(data, src: OfficialSource) -> List[Item]:
         code = _first(node, "code")
         if not title or not re.fullmatch(r"[0-9a-fA-F]{32}", code):
             continue
-        link = f"https://www.binance.com/en/support/announcement/{code}"
+        link = f"https://www.binance.com/zh-CN/support/announcement/{code}"
         if link in seen:
             continue
         seen.add(link)
