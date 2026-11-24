@@ -295,6 +295,25 @@ def _anysearch_keys() -> List[str]:
     return [key.strip() for key in raw.replace(";", ",").split(",") if key.strip()]
 
 
+class AllKeysFailed(RuntimeError):
+    """所有 Anysearch key 都失败（含配额耗尽）。"""
+
+
+def _try_keys(search_fn, keys, *args, label="Anysearch"):
+    """按顺序尝试多把 key：402/配额耗尽自动换下一把，其他错误也依次尝试。
+
+    背景（2026-11-25）：第一把 key 当日配额耗尽返回 402，但代码只取 keys[0]，
+    导致六仓同时召回归零；#2~#4 明明可用却被闲置。
+    """
+    failures = []
+    for index, key in enumerate(keys):
+        try:
+            return search_fn(key, *args), index
+        except Exception as exc:  # noqa: BLE001 单把失败继续试下一把
+            failures.append(f"key{index + 1}: {type(exc).__name__} {str(exc)[:100]}")
+    raise AllKeysFailed("；".join(failures))
+
+
 def anysearch_search(query: str, key: str, since_text: str) -> List[SearchHit]:
     url = f"{os.environ.get('ANYSEARCH_BASE_URL', ANYSEARCH_DEFAULT_BASE_URL).rstrip('/')}/v1/search"
     scoped_query = (f"{query}；只返回 {since_text} 之后新发布的内容，"
@@ -346,12 +365,12 @@ def run_cloud(
         try:
             hits = exa_search(query, report.since)
             if not hits and keys:
-                hits = anysearch_search(query, keys[0], report.since)
+                hits, _used = _try_keys(anysearch_search, keys, query, report.since)
         except Exception as exc:  # noqa: BLE001 云搜索失败留给 Anysearch 兜底
             message = f"{query}: {type(exc).__name__} {str(exc)[:120]}"
             if keys:
                 try:
-                    hits = anysearch_search(query, keys[0], report.since)
+                    hits, _used = _try_keys(anysearch_search, keys, query, report.since)
                     report.errors.append(message + " → Anysearch 兜底成功")
                 except Exception as exc2:  # noqa: BLE001
                     report.errors.append(message + f" → Anysearch 也失败: {str(exc2)[:120]}")
