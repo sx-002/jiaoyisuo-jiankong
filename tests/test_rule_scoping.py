@@ -23,7 +23,7 @@ class TestRuleScoping(unittest.TestCase):
 
     def test_other_loose_patterns_are_bounded(self):
         # 这些 `.*` 原本也能跨整篇；现在必须限定在小窗口内
-        self.assertIsNone(RULES["R10_reserve_redeem"].search("储备金充足。" + "x" * 200 + "加息"))
+        self.assertIsNone(RULES["R10_reserve_redeem"].search("理财" + "x" * 200 + "加息"))
         self.assertIsNotNone(RULES["R10_reserve_redeem"].search("理财加息"))
 
 
