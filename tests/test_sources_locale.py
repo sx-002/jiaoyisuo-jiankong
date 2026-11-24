@@ -29,6 +29,13 @@ class TestChineseLocale(unittest.TestCase):
         self.assertEqual(len(items), 1)
         self.assertIn("/zh-CN/", items[0].url)
 
+    def test_other_sources_use_chinese_endpoints(self):
+        """Bitget 和 MEXC 有中文站点，必须用中文地址，否则公告会被语言过滤挡掉。"""
+        by_name = {s.name: s for s in sources.SOURCES}
+        self.assertIn("/zh-CN/", by_name["bitget_html"].url)
+        self.assertIn("/zh-CN/", by_name["mexc_api"].url)
+        self.assertIn("/zh-CN/", by_name["mexc_delisting_api"].url)
+
 
 if __name__ == "__main__":
     unittest.main()
