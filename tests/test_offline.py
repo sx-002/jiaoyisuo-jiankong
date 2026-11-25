@@ -302,7 +302,7 @@ class TestInfrastructure(unittest.TestCase):
 
 class TestSources(unittest.TestCase):
     def test_official_list_has_15(self):
-        self.assertEqual(len(sources.OFFICIAL_EXCHANGES), 15)
+        self.assertEqual(len(sources.OFFICIAL_EXCHANGES), 12)
         self.assertIn("MEXC", sources.OFFICIAL_EXCHANGES)
         self.assertNotIn("KuCoin", sources.OFFICIAL_EXCHANGES)
 

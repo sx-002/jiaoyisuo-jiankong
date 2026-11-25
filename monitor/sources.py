@@ -67,10 +67,6 @@ SOURCES: List[OfficialSource] = [
         "https://www.bitget.com/zh-CN/support/sections/12508313443483", "html", "中文列表页实测 200"),
     OfficialSource("gate_blocked", "Gate", "blocked",
         "https://www.gate.com/announcements", "blocked", "GitHub 出口 403，只靠云端搜索兜底"),
-    OfficialSource("coinbase_status", "Coinbase", "rss_json",
-        "https://status.coinbase.com/history.rss", "rss", "状态页 RSS 实测 200"),
-    OfficialSource("coinbase_status_json", "Coinbase", "rss_json",
-        "https://status.coinbase.com/api/v2/summary.json", "coinbase_status", "逐组件状态"),
     OfficialSource("weex_html", "WEEX", "html",
         "https://www.weex.com/zh-CN/product-launch", "html", "产品公告页实测 200"),
     OfficialSource("yubit_sitemap", "YUBIT", "rss_json",
@@ -79,10 +75,6 @@ SOURCES: List[OfficialSource] = [
         "https://www.deepcoin.com/ps/zh/announcements", "html", "可达但列表需渲染，可能 low_quality"),
     OfficialSource("easicoin_zendesk", "EasiCoin", "api",
         "https://easicoin.zendesk.com/api/v2/help_center/zh-cn/articles.json?per_page=5", "zendesk", ""),
-    OfficialSource("bitbaby_html", "Bitbaby", "html",
-        "https://www.bitbaby.com/en-us/announcement", "html", "日期只到天"),
-    OfficialSource("hotcoin_html", "Hotcoin", "html",
-        "https://www.hotcoin.com/en_US/announcement", "html", "可达但地区限制可能导致内容不全"),
     OfficialSource("bittap_zendesk", "BitTap", "api",
         "https://support.bittap.com/api/v2/help_center/zh-cn/articles.json?per_page=5", "zendesk", ""),
     OfficialSource("mgbx_zendesk", "MGBX", "api",
@@ -91,11 +83,8 @@ SOURCES: List[OfficialSource] = [
         "https://www.mexc.com/help/announce/api/zh-CN/section/15425930840826/articles", "mexc",
         "维护/充提公告；名单内，近期被美国管控，重点看监管与提现"),
     OfficialSource("mexc_delisting_api", "MEXC", "api",
-        "https://www.mexc.com/help/announce/api/zh-CN/section/15425930840822/articles", "mexc",
+        "https://www.mexc.com/help/announce/api/zh-TW/section/15425930840822/articles", "mexc",
         "下架与风险提示"),
-    OfficialSource("mexc_telegram", "MEXC", "html",
-        "https://t.me/s/MEXC_Announcement", "telegram_preview",
-        "公开预览兜底（帖子在 div 里，需专用解析）"),
 ]
 
 OFFICIAL_EXCHANGES = sorted({s.exchange for s in SOURCES})
@@ -381,13 +370,35 @@ def _mexc_items(data, src: OfficialSource) -> List[Item]:
             continue
         seen.add(link)
         published = _timestamp(str(row.get("createdAt") or row.get("updateTime") or ""))
-        items.append(Item(src.exchange, title[:500], link, published,
+        items.append(Item(src.exchange, _to_simplified(title)[:500], link, published,
                           source_name=src.name, source_layer=src.layer))
         if len(items) >= 30:
             break
     if not items:
         raise http.FetchFailure("MEXC 文章接口 data.results 为空，字段可能变化", "low_quality")
     return items
+
+
+_OPENCC = None
+_OPENCC_TRIED = False
+
+
+def _to_simplified(text: str) -> str:
+    """繁体转简体。MEXC 中文下架公告是繁体，装了 opencc 就转，没装就原样返回。"""
+    global _OPENCC, _OPENCC_TRIED
+    if not _OPENCC_TRIED:
+        _OPENCC_TRIED = True
+        try:
+            from opencc import OpenCC  # type: ignore
+            _OPENCC = OpenCC("t2s")
+        except Exception:  # noqa: BLE001 没装就降级
+            _OPENCC = None
+    if _OPENCC is None:
+        return text
+    try:
+        return _OPENCC.convert(text)
+    except Exception:  # noqa: BLE001
+        return text
 
 
 def _binance_items(data, src: OfficialSource) -> List[Item]:

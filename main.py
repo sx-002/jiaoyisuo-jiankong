@@ -32,8 +32,8 @@ def main() -> int:
 
     if args.self_check:
         failures = []
-        if len(sources.OFFICIAL_EXCHANGES) != 15:
-            failures.append(f"官方名单应为 15 家，实际 {len(sources.OFFICIAL_EXCHANGES)}")
+        if len(sources.OFFICIAL_EXCHANGES) != 12:
+            failures.append(f"官方名单应为 12 家，实际 {len(sources.OFFICIAL_EXCHANGES)}")
         if rules.judge("Binance 暂停提现") is None:
             failures.append("规则未识别暂停提现")
         if rules.judge("OKX 上线新币") is not None:

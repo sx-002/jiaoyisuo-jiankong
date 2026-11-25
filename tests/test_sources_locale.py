@@ -34,7 +34,9 @@ class TestChineseLocale(unittest.TestCase):
         by_name = {s.name: s for s in sources.SOURCES}
         self.assertIn("/zh-CN/", by_name["bitget_html"].url)
         self.assertIn("/zh-CN/", by_name["mexc_api"].url)
-        self.assertIn("/zh-CN/", by_name["mexc_delisting_api"].url)
+        # 下架栏目简体站返英文，繁体站才是中文，所以这里允许 zh-TW
+        self.assertTrue("/zh-CN/" in by_name["mexc_delisting_api"].url
+                        or "/zh-TW/" in by_name["mexc_delisting_api"].url)
 
 
 if __name__ == "__main__":

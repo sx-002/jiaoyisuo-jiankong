@@ -1,0 +1,2 @@
+# MEXC 部分中文公告是繁体，用 opencc 转简体；没装也能跑（自动降级原文）
+opencc-python-reimplemented

@@ -16,7 +16,10 @@ HTML = """
 
 class TestTelegramPreview(unittest.TestCase):
     def setUp(self):
-        self.src = [s for s in sources.SOURCES if s.name == "mexc_telegram"][0]
+        # 这个源已从监控名单移除（纯英文 Telegram 频道），但解析器保留，
+        # 以后有中文频道可以直接复用，所以这里手工构造一个源来测解析。
+        self.src = sources.OfficialSource(
+            "tg_preview", "MEXC", "html", "https://t.me/s/example", "telegram_preview", "测试用")
 
     def test_parses_post_with_text_and_time(self):
         items = sources._telegram_preview_items(HTML, self.src)
