@@ -49,6 +49,8 @@ class OfficialSource:
     kind: str
     note: str = ""
     headers: Optional[Dict[str, str]] = None
+    #: 已知抓不到内容（地区限制/登录墙/必须前端渲染）：按预期记录，不计入「部分源失败」。
+    expected: bool = False
 
 
 # 官方监控名单 15 家。Gate 在 GitHub 出口实测 403，保留条目但标 blocked，
@@ -72,11 +74,13 @@ SOURCES: List[OfficialSource] = [
     OfficialSource("yubit_sitemap", "YUBIT", "rss_json",
         "https://yubit.gitbook.io/yubit/cn/sitemap-pages.xml", "yubit", "sitemap 筛公告节点"),
     OfficialSource("deepcoin_html", "Deepcoin", "html",
-        "https://www.deepcoin.com/ps/zh/announcements", "html", "可达但列表需渲染，可能 low_quality"),
+        "https://www.deepcoin.com/ps/zh/announcements", "html",
+        "前端渲染站，纯 HTTP 拿不到列表（已实测）；按预期记录，不算故障", expected=True),
     OfficialSource("easicoin_zendesk", "EasiCoin", "api",
         "https://easicoin.zendesk.com/api/v2/help_center/zh-cn/articles.json?per_page=5", "zendesk", ""),
     OfficialSource("bittap_zendesk", "BitTap", "api",
-        "https://support.bittap.com/api/v2/help_center/zh-cn/articles.json?per_page=5", "zendesk", ""),
+        "https://support.bittap.com/api/v2/help_center/zh-cn/articles.json?per_page=5", "zendesk",
+        "疑似登录墙；按预期记录，不算故障", expected=True),
     OfficialSource("mgbx_zendesk", "MGBX", "api",
         "https://support.mgbx.com/api/v2/help_center/zh-cn/articles.json?per_page=5", "zendesk", ""),
     OfficialSource("mexc_api", "MEXC", "api",
@@ -120,6 +124,7 @@ class SourceReport:
     error: str = ""
     items: List[Item] = field(default_factory=list)
     duration_ms: int = 0
+    expected: bool = False  # 已知抓不到，按预期失败处理
 
     @property
     def health(self) -> str:
@@ -445,20 +450,22 @@ def fetch_source(src: OfficialSource, *, timeout: float = 15.0) -> SourceReport:
     started = __import__("time").time()
     if src.kind == "blocked":
         return SourceReport(src.name, src.exchange, src.layer, False, "blocked",
-                            "GitHub 出口实测 403，按预期记失败，交云端搜索兜底")
+                            "GitHub 出口实测 403，按预期记失败，交云端搜索兜底", expected=True)
     result = http.fetch(src.url, timeout=timeout, headers=src.headers, check_login_wall=True)
     if not result.ok:
         return SourceReport(src.name, src.exchange, src.layer, False, result.error_type,
-                            result.error, duration_ms=result.duration_ms)
+                            result.error, duration_ms=result.duration_ms, expected=src.expected)
     try:
         items = parse_payload(src, result)
     except http.FetchFailure as exc:
         return SourceReport(src.name, src.exchange, src.layer, False, exc.error_type, str(exc),
-                            duration_ms=int((__import__("time").time() - started) * 1000))
+                            duration_ms=int((__import__("time").time() - started) * 1000),
+                            expected=src.expected)
     except Exception as exc:  # noqa: BLE001 单源解析异常必须被隔离
         return SourceReport(src.name, src.exchange, src.layer, False, "low_quality",
                             f"{type(exc).__name__}: {exc}",
-                            duration_ms=int((__import__("time").time() - started) * 1000))
+                            duration_ms=int((__import__("time").time() - started) * 1000),
+                            expected=src.expected)
     if not items:
         return SourceReport(src.name, src.exchange, src.layer, True, SOURCE_EMPTY, "",
                             [], int((__import__("time").time() - started) * 1000))

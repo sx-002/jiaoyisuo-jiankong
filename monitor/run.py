@@ -245,6 +245,8 @@ def run(*, fixtures: str = "", state_path: str = "state/state.json", report_path
         "sources": [r.to_dict() for r in reports],
         "source_failures": st.source_failures,
         "all_sources_failed": all_failed,
+        "expected_failures": [r.name for r in reports if not r.ok and getattr(r, "expected", False)],
+        "unexpected_failures": [r.name for r in reports if not r.ok and not getattr(r, "expected", False)],
         "source_health": sources.source_health(reports),
         "source_health_by_name": {r.name: r.health for r in reports},
         "cloud": {**cloud_report.to_dict(), "since": since_text},
@@ -269,6 +271,9 @@ def run(*, fixtures: str = "", state_path: str = "state/state.json", report_path
         target.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     if failed:
         return EXIT_ALL_FAILED
-    if all_failed or empty_round or (reports and any(not r.ok for r in reports)):
+    # 「部分源失败」只算真正意外的失败：已知抓不到的源（blocked/登录墙/必须渲染）
+    # 每轮都会被记失败，若也算进去，exit=1 就变成恒定值、失去告警意义（实测近 5 天 155/155 全是 1）。
+    unexpected_failures = [r for r in reports if not r.ok and not getattr(r, "expected", False)]
+    if all_failed or empty_round or unexpected_failures:
         return EXIT_PARTIAL
     return EXIT_OK
